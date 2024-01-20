@@ -1,25 +1,23 @@
 import logo from './logo.svg';
-import axios from 'axios';
 import './App.css';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-
 
 function App() {
-  async function testGet(e) {
-    e.preventDefault();
-    let response = await axios.post('http://localhost:5000/api/test');
-    console.log(response.data);
-  }
-
   return (
     <div className="App">
-       <button onClick={async (e)=> await testGet(e)}>cock</button>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Navigate to="/homepage" />} />
-          {/* <Route path="/homepage" element={<SquishList />} /> */}
-        </Routes>
-      </BrowserRouter>
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <p>
+          Edit <code>src/App.js</code> and save to reload.
+        </p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+        </a>
+      </header>
     </div>
   );
 }
