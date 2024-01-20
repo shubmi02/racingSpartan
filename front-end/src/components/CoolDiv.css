@@ -1,0 +1,32 @@
+
+.ResizableDiv {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+}
+
+.resizable-div {
+    position: absolute;
+    border: 1px solid #000;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.resizable-div span {
+    display: block;
+    background-color: #f0f0f0;
+    padding: 5px;
+}
+
+.resize-handle {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: #000;
+    cursor: pointer;
+}
+
+.resize-handle.top-left {
+    top: 20;
+    left: 0;
+}

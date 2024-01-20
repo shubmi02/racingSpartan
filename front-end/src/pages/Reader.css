@@ -1,0 +1,36 @@
+/* Reader.css */
+
+.Reader-wrapper {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 1%;
+  }
+  
+  .Reader-container {
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .Reader-left {
+    flex: 1;
+    border: 1px solid #F00;
+    width: 15%;
+    padding: 2%;
+    box-sizing: border-box;
+    overflow: auto;
+  }
+  
+  .Reader-middle {
+    border: 1px solid #0F0;
+    width: 55%;
+  }
+  
+  .Reader-right {
+    flex: 1;
+    border: 1px solid #00F;
+    width: 25%;
+    padding: 2%;
+    box-sizing: border-box;
+    overflow: auto;
+  }
+  
