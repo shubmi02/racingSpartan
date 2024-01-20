@@ -2,6 +2,7 @@ import logo from './logo.svg';
 import axios from 'axios';
 import './App.css';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import Reader from './pages/Reader';
 
 
 function App() {
@@ -12,14 +13,18 @@ function App() {
   }
 
   return (
-    <div className="App">
-       <button onClick={async (e)=> await testGet(e)}>cock</button>
+    <div className="App" style={{background: 'green fill', height: '100vh', width: '100vw'}}>
+       {/* <button onClick={async (e)=> await testGet(e)}>cock</button> */}
+      
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Navigate to="/homepage" />} />
-          {/* <Route path="/homepage" element={<SquishList />} /> */}
+          <Route path="/reader" element={<Reader/>} />
+          {/* btw the path should be changed in the above one to class/id/reader
+           <Route path="/homepage" element={<SquishList />} /> */}
         </Routes>
       </BrowserRouter>
+      
     </div>
   );
 }

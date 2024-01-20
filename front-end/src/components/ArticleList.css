@@ -1,0 +1,7 @@
+.center-text {
+    text-align: center;
+    max-height: '50%';
+    overflow: 'hidden';
+    text-overflow: 'hidden';
+
+}
