@@ -2,14 +2,14 @@
   "name": "full-stack-app",
   "version": "1.0.0",
   "scripts": {
-      "start": "concurrently \"npm run start:frontend\" \"npm run start:backend\"",
-      "start:frontend": "cd front-end && npm start",
-      "start:backend": "cd back-end && npm start"
+    "build": "concurrently \"npm run build:frontend\" \"npm run build:backend\"",
+    "build:frontend": "cd front-end && npm update && npm start",
+    "build:backend": "cd back-end && npm update && npm start"
   },
   "dependencies": {
-      "axios": "^1.6.5",
-      "concurrently": "^6.0.2",
-      "react-scripts": "^5.0.1",
-      "dotenv": "^16.3.2"
+    "axios": "^1.6.5",
+    "concurrently": "^6.0.2",
+    "dotenv": "^16.3.2",
+    "react-scripts": "^3.0.1"
   }
 }
