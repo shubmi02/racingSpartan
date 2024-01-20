@@ -45,7 +45,7 @@ app.post('/api/test', async (req, res) => {
 
   const result = await userDB.insertOne(doc);
   console.log(`inserted id: ${result.insertedId}`);
-  res.json('hi');
+  res.json('bruh');
 });
 
 app.listen(port, () => console.log(`server started on port ${port}`));
