@@ -14,7 +14,7 @@ app.use(cors({
 app.use(bodyParser.json({ limit: '10mb' }));
 
 
-app.post('/test', async (req, res) => {
+app.post('/api/test', async (req, res) => {
   res.json('hows it goin');
 });
 
