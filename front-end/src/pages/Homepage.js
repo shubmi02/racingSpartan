@@ -6,14 +6,14 @@ class Homepage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            classes: ['science', 'history']
+            classes: []
         }
     }
         
     render() {
         return(
-            <button>
-
+            <button >
+                Button Topic1
             </button>
         )
     }

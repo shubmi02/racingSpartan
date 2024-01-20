@@ -16,12 +16,13 @@ function App() {
 
   return (
     <div className="App">
-       <button onClick={async (e)=> await testGet(e)}>cock</button>
+       {/* <button onClick={async (e)=> await testGet(e)}>cock</button> */}
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Navigate to="/homepage" />} />
           <Route path="/homepage" element={<Homepage/>} />
-          {/* <Route path="/homepage" element={<SquishList />} /> */}
+          <Route path="/science" element={<Science/>} />
+          //{/* <Route path="/homepage" element={<SquishList />} /> */}
         </Routes>
       </BrowserRouter>
     </div>
