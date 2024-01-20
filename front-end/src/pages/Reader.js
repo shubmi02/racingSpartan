@@ -60,7 +60,6 @@ class Reader extends React.Component {
                 <div >
                     <CoolDiv element={element2} up={20} left={10} width={10} height = {20}/>
                 </div>
-                
             </div>
         );
     }

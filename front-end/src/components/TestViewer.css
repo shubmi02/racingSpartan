@@ -1,0 +1,12 @@
+
+.sliding-text-window {
+    overflow: hidden;
+    width: 100%;
+    height: 50px; /* Adjust the height as needed */
+  }
+  
+  .text-content {
+    display: inline-block;
+    white-space: nowrap;
+    transition: transform 0.3s ease-out;
+  }
