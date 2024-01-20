@@ -2,6 +2,9 @@ import logo from './logo.svg';
 import axios from 'axios';
 import './App.css';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import Homepage from './pages/Homepage';
+
+
 
 
 function App() {
@@ -17,6 +20,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Navigate to="/homepage" />} />
+          <Route path="/homepage" element={<Homepage/>} />
           {/* <Route path="/homepage" element={<SquishList />} /> */}
         </Routes>
       </BrowserRouter>
