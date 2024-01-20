@@ -14,26 +14,55 @@ const client = new MongoClient(process.env.DB_URI, {
   }
 });
 
+let userDB = null;
 async function connectToDatabase() {
   try {
     await client.connect();
+    userDB = client.db('RacingSpartan').collection('Users'); 
     console.log('Connected to MongoDB');
   } catch (error) {
     console.error('Error connecting to MongoDB:', error);
   }
 }
 
-connectToDatabase();
 
-const userDB = client.db('RacingSpartan').collection('Users'); 
+connectToDatabase();
 
 app.use(cors({
   origin: true,
   maxAge: 86400
 }));
 
-app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.json({ limit: '50mb' }));
 
+app.post('/api/signUp', async (req, res) => {
+  console.log(req.body);
+
+  //input validation
+  if (req.body.password.length >= 8) {
+    //safe to write to db
+    let doc = req.body;
+    doc['classes'] = [];
+    
+    const result = await userDB.insertOne(doc);
+    console.log(result.insertedId);
+  }
+  else {
+    res.json({
+      msg: 'password too short'
+    });
+    return;
+  }
+  
+
+  res.json(1);
+});
+
+app.post('/api/login', async (req, res) => {
+  console.log(req.body);
+
+  res.json(1);
+});
 
 
 
@@ -49,7 +78,4 @@ app.post('/api/test', async (req, res) => {
 });
 
 app.listen(port, () => console.log(`server started on port ${port}`));
-
-
-
 
