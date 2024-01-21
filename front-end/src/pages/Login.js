@@ -24,6 +24,7 @@ class Login extends React.Component {
       if (res.data) {
         console.log('login successful');
         localStorage.setItem('uid', res.data);
+        window.location.href = '/contact';
       }
       else {
         console.log('login failed');
@@ -59,7 +60,7 @@ class Login extends React.Component {
 
     const submitButton = (
       <div>
-        <button onClick={async (e) => await this.handleSubmit(e)}>Sign Up</button>
+        <button onClick={async (e) => await this.handleSubmit(e)}>Login</button>
       </div>
     );
 
