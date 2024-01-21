@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import CoolDiv from '../components/CoolDiv';
+import { Link } from 'react-router-dom';
 
 class Login extends React.Component {
   constructor(props) {
@@ -20,8 +21,9 @@ class Login extends React.Component {
     try {
       console.log(this.server_url);
       const res = await axios.post(`http://localhost:5000/api/login`, body);
-      if (res.data == 1) {
+      if (res.data) {
         console.log('login successful');
+        localStorage.setItem('uid', res.data);
       }
       else {
         console.log('login failed');

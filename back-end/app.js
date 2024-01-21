@@ -83,7 +83,7 @@ app.post('/api/login', async (req, res) => {
     },
     {
       $project: {
-        _id: 0, // Exclude the _id field if you want
+        _id: 1, // Exclude the _id field if you want
         password: 1,
         salt: 1
       }
@@ -97,7 +97,7 @@ app.post('/api/login', async (req, res) => {
     const hashedEnteredPassword = hash(req.body.password, salt);
     console.log(`hashed stored: ${hashedStoredPassword} \nhashed entered ${hashedEnteredPassword}`);
     if (hashedEnteredPassword === hashedStoredPassword) {
-      res.json(1);
+      res.json(userPassword[0]._id);
       return;
     }
   }
