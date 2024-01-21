@@ -205,9 +205,25 @@ app.post('/api/getArticles', async (req, res) => {
   }
 })
 
-// app.post('/api/getSummary', async (req, res) => {
-//   r
-// });
+app.post('/api/getSummary', async (req, res) => {
+  const { text } = req.body;
+  const body = {
+    serving_endpoint: 'api.vectara.io',
+    customer_id: process.env.VECTARA_CUSTID,
+    corpus_id: 13,
+    auth_url: 'https://vectara-prod-3045926619.auth.us-west-2.amazoncognito.com/oauth2/token',
+    client_id: process.env.VECTARA_CLIENTID,
+    client_secret: process.env.VECTARA_CLIENT_SECRET,
+    text: text
+  }
+  //console.log(body);
+  let response = await axios.post(`http://localhost:5000/api/queryData`, body);
+  // console.log(response.data.responseSet[0].summary[0].text);
+  let summary = response.data.responseSet[0].summary[0].text;
+
+  res.json(summary);
+
+});
 
 app.post('/api/deleteClass', async (req, res) => {
   const { classID } = req.body;
@@ -235,7 +251,7 @@ app.post('/api/test', async (req, res) => {
 });
 
 //for the AI API
-app.post("/queryData", (req, res) => {
+app.post("/api/queryData", (req, res) => {
   const {
     serving_endpoint,
     customer_id,
@@ -243,11 +259,12 @@ app.post("/queryData", (req, res) => {
     auth_url,
     client_id,
     client_secret,
+    text
   } = req.body;
   getJwtToken(auth_url, client_id, client_secret)
     .then((token) => {
       query
-        .query(customer_id, corpus_id, serving_endpoint, token)
+        .query(customer_id, corpus_id, serving_endpoint, token, text)
         .then((result) => {
           res.send(result.data);
         });

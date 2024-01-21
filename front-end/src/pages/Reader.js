@@ -4,6 +4,7 @@ import ArticleList from '../components/ArticleList';
 import TextViewer from '../components/TextViewer';
 import SummaryViewer from '../components/SummaryViewer';
 import QuestionEntry from '../components/QuestionEntry';
+import PdfTextReader from '../components/PdfTextReader';
 import axios from 'axios';
 
 class Reader extends React.Component {
@@ -13,42 +14,22 @@ class Reader extends React.Component {
         this.state = {
             isLeftCollapsed: false,
             isRightCollapsed: false,
-            articleNames: ['Article 1 with a kinda long title', 'short title', 'just a normal title'],
-            articleTexts: [ `system (such as the file system) run in user space. In such systems, it is difficult to
-            draw a clear boundary. Everything running in kernel mode is clearly part of the
-            operating system, but some programs running outside it are arguably also part of it,
-            or at least closely associated with it.
-            Operating systems differ from user (i.e., application) programs in ways other
-            than where they reside. In particular, they are huge, complex, and long-lived. The
-            source code of the heart of an operating system like Linux or Windows is on the
-            order of fiv e million lines of code or more. To conceive of what this means, think
-            of printing out fiv e million lines in book form, with 50 lines per page and 1000
-            pages per volume (larger than this book). It would take 100 volumes to list an operating system of this size—essentially an entire bookcase. Can you imagine getting a job maintaining an operating system and on the first day having your boss
-            bring you to a bookcase with the code and say: Go learn that. And this is only
-            for the part that runs in the kernel. When essential shared libraries are included,
-            Windows is well over 70 million lines of code or 10 to 20 bookcases. And this
-            excludes basic application software (things like Windows Explorer, Windows
-            Media Player, and so on).
-            It should be clear now why operating systems live a long time—they are very
-            hard to write, and having written one, the owner is loath to throw it out and start
-            again. Instead, such systems evolve over long periods of time. Windows 95/98/Me
-            was basically one operating system and Windows NT/2000/XP/Vista/Windows 7 is
-            a different one. They look similar to the users because Microsoft made very sure
-            that the user interface of Windows 2000/XP/Vista/Windows 7 was quite similar to
-            that of the system it was replacing, mostly Windows 98. Nevertheless, there were
-            very good reasons why Microsoft got rid of Windows 98. We will come to these
-            when we study Windows in detail in Chap. 11.
-            Besides Windows, the other main example we will use throughout this book is
-            UNIX and its variants and clones. It, too, has evolved over the years, with versions
-            like System V, Solaris, and FreeBSD being derived from the original system,
-            whereas Linux is a fresh code base, although very closely modeled on UNIX and
-            highly compatible with it. We will use examples from UNIX throughout this book
-            and look at Linux in detail in Chap. 10.
-            In this chapter we will briefly touch on a number of key aspects of operating
-            systems, including what they are, their history, what kinds are around, some of the
-            basic concepts, and their structure. We will come back to many of these important
-            topics in later chapters in more detail.`],
+            articleNames: [],
+            articleTexts: [],
             summary: `Summary text goes here.`,
+            highlightedText: `From a strict mathematical point of view, we may consider the (theoretical) existence of physical universes having properties which differ from the actual one which we are aware of and experience. Only universes for which “locality” and “invariances” are features allow for science to be possible.
+            By locality, we mean that to analyze and understand any given system, bounded in space, only other nearby systems need to be taken into consideration. For example, to investigate the motion of the earth in the solar system, a very good approximation is to include only the presence of the sun; the other solar bodies have little influence. Likewise, a study of tides on the earth requires only the inclusion of the sun and moon. The effects of the other planets, the distant stars, and other objects in the galaxy are negligible. In summary, the existence of a condition of locality means that we can study
+            Published by Digital Commons @ the Georgia Academy of Science, 2016 3
+            Georgia Journal of Science, Vol. 74 [2016], Art. 3
+            particular phenomena without knowing what everything else is doing in the physical universe. At a higher level of theoretical analysis, the locality principal places strong restrictions on the types of forces which can exist in the physical universe.
+            Invariances are related to symmetries. A system is said to have a symmetry if you can “do something” to it and the properties of the system do not change. For example, a book may be rotated by 360o to give the same book in its original orientation. If you closed your eyes before the rotation, then upon opening them, there is no way to determine if the book was rotated zero, one, or ten times.
+            Symmetry principles play important roles in science, mainly through their connection with conservation laws (Arnold 1989; Holton and Brush 2001; Simonyi 2012). In brief, if a system has a symmetry, then something is invariant or constant; if a system has an invariant, then there is a corresponding symmetry. Within the context of physics, the following such connections hold (Arnold 1989; Simonyi 2012):To illustrate these principles, consider the simple experiment of heating a cup of water for tea. The experiment is this: 1) Place water in a cup. 2) Heat the water in a microwave. 3) Remove the cup with the hot water and place a teabag in the hot water. 4) Remove the teabag after 5 min and drink the tea. This experiment can be done today, tomorrow, and was done yesterday. In all cases, the results are the same, namely, a delicious cup of tea. Our conclusion is that the “experiment” gives the same outcome whenever we do it, i.e., when it is done (the time) does not play a role. In a similar manner, the tea could be made in Atlanta, New York, or Nashville, with the same expected outcome.
+            This experiment, while elementary, demonstrates that its end result, namely, a delicious cup of tea, is independent of both where it is done (location) and when (time). As indicated above the existence of a symmetry implies something does not change, e.g., a conservation law holds, and, likewise, if something is (always) constant for a system, then some symmetry holds for the system.
+            To recapitulate, science is only possible if there exists locality and invariances in the physical universe. These principles allow experiments to be repeated at different times and locations, and because of these features it is then possible to create “public knowledge,” i.e., science.
+            `,
+            extra: {
+                currDoc: 0
+            }
         };
     }
 
@@ -59,20 +40,29 @@ class Reader extends React.Component {
         }
 
         let body = {}
-
+        //seperate into async routines that run on their own
         body = {
             ClassID: localStorage.getItem('ClassID')
         }
         let result = await axios.post(`http://localhost:5000/api/getArticles`, body);
         let newArticleNames = [];
         let newArticleByte64 = [];
-        console.log(result.data);
 
         for (let article of result.data.articles) {
             newArticleNames.push(article.articleName);
-            newArticleByte64.push(article.file);
+            newArticleByte64.push(article.file.split(',')[1]);
         }
         this.setState({articleNames: newArticleNames});
+        this.setState({articleTexts: newArticleByte64});
+        // dont use until demo cuz lotta computation
+        // body = {
+        //     text: this.state.highlightedText
+        // }
+        // result = await axios.post(`http://localhost:5000/api/getSummary`, body);
+        // if (result.data) {
+        //     this.setState({summary: result.data});
+        // }
+        
 
 
     }
@@ -82,14 +72,12 @@ class Reader extends React.Component {
         const element1 = (
             <ArticleList articleNames={this.state.articleNames} />
         )
-        const element =  (
-            <p>hi</p>
-        )
         const element2 = (
             <TextViewer text={this.state.articleTexts[0]} />
+            // <PdfTextReader base64Pdf={this.state.articleTexts[0]}/>
         )
         const element3 = (
-            <SummaryViewer text='Summary Display' />
+            <SummaryViewer text={this.state.summary} />
         )
         const backButton = (
             <button>Back</button>
@@ -123,7 +111,7 @@ class Reader extends React.Component {
                     <CoolDiv element={submitButton} up={80} left={40} width={20} height = {50}/>
                 </div>
                 <div>
-                    <CoolDiv element={getSummaryButton} up={40} left={75} width={20} height = {50}/>
+                    <CoolDiv element={getSummaryButton} up={69} left={75} width={20} height = {50}/>
                 </div>
                 <div>
                     <CoolDiv element = {enterAnswerField} up={60} left={40} width={20} height = {50}/>
