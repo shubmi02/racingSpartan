@@ -46,11 +46,11 @@ class Reader extends React.Component {
         }
         let result = await axios.post(`http://localhost:5000/api/getArticles`, body);
         let newArticleNames = [];
-        let newArticleByte64 = [];
+        let newArticleByte64 = [`JVBERi0xLjMKJcfsj6IKNSAwIG9iago8PAovVGl0bGUgKP7/KQovQ3JlYXRpb25EYXRlIChEOjIwMjIwNDE4MTQxMDArMDInMDAnKQovUHJvZHVjZXIgKEE6MDAwMDAwMDAwMDAwMDAwMDAyIC0yMDIxLzA0LzEyKQovQ29tcG9uZW50cyA0IDAgUj4+CmVuZG9iago2IDAgb2JqCjw8Ci9UeXBlIC9DYXRhbG9nCi9QYWdlcyA8PAovRmlsdGVyIC9GbGF0ZURlY29kZQovTGVuZ3RoIDExMDAwCi9TdWJ0eXBlIC9UeXBlMQovUGFnZXMgMiAwIFIKL0JpdHNQZXJDb21wb25lbnQgNDYgMCBSCi9Db250ZW50cyA1IDAgUj4+CmVuZG9iago3IDAgb2JqCjw8Ci9UeXBlIC9DYXRhbG9nCi9QYWdlcyA8PAovRmlsdGVyIC9GbGF0ZURlY29kZQovTGVuZ3RoIDExMDAwCi9TdWJ0eXBlIC9UeXBlMQovUGFnZXMgMiAwIFIKL0JpdHNQZXJDb21wb25lbnQgNTcgMCBSCi9Db250ZW50cyA2IDAgUj4+CmVuZG9iago4IDAgb2JqCjw8Ci9UeXBlIC9DYXRhbG9nCi9QYWdlcyA8PAovRmlsdGVyIC9GbGF0ZURlY29kZQovTGVuZ3RoIDExMDAwCi9TdWJ0eXBlIC9UeXBlMQovUGFnZXMgMiAwIFIKL0JpdHNQZXJDb21wb25lbnQgNjggMCBSCi9Db250ZW50cyA3IDAgUj4+CmVuZG9iago5IDAgb2JqCjw8Ci9UeXBlIC9DYXRhbG9nCi9QYWdlcyA8PAovRmlsdGVyIC9GbGF0ZURlY29kZQovTGVuZ3RoIDExMDAwCi9TdWJ0eXBlIC9UeXBlMQovUGFnZXMgMiAwIFIKL0JpdHNQZXJDb21wb25lbnQgODAgMCBSCi9Db250ZW50cyA4IDAgUj4+CmVuZG9iagoxCjw8Ci9GaWx0ZXIgL0ZsYXRlRGVjb2RlCi9MZW5ndGggMTAwMDAKL1N1YnR5cGUgL1R5cGUxCi9QYWdlcyAyIDAgUgo+PgovQmFzZUZvbnQKL1RleHQKL0ltYWdlCi9SZXNvdXJjZXMgMyAwIFIKL0ZvbnRGYW1pbHkKPj4Kc3RyZWFtCnicbK1SXU3JKi5ptVm5rcUoqLnJjVlJTJy5yY3JWUlMuX2pzUkqLmVDVFJzUmNydEpVLmNsaWNrKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioq`];
 
         for (let article of result.data.articles) {
             newArticleNames.push(article.articleName);
-            newArticleByte64.push(article.file.split(',')[1]);
+            newArticleByte64.push(article.file);
         }
         this.setState({articleNames: newArticleNames});
         this.setState({articleTexts: newArticleByte64});
@@ -73,8 +73,9 @@ class Reader extends React.Component {
             <ArticleList articleNames={this.state.articleNames} />
         )
         const element2 = (
-            <TextViewer text={this.state.articleTexts[0]} />
-            // <PdfTextReader base64Pdf={this.state.articleTexts[0]}/>
+            // <TextViewer text={this.state.articleTexts[0]} />
+            // <img src={this.state.articleTexts[0]} style={{ width: '100%', height: '100%' }} />
+            <PdfTextReader base64Pdf={this.state.articleTexts[0]}/>
         )
         const element3 = (
             <SummaryViewer text={this.state.summary} />
