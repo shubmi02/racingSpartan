@@ -54,7 +54,7 @@ class SignUp extends React.Component {
           <CoolDiv element={mainForm} up={35} left={35} width={20} height={20} />
         </div>
         <div>
-          <CoolDiv element={mainForm} up={35} left={35} width={20} height={20} />
+          <CoolDiv element={submitButton} up={65} left={38} width={20} height={20} />
         </div>
       </div>
     );
