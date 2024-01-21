@@ -11,6 +11,7 @@ const create_corpus = require("./ai-dependencies/create_corpus");
 const delete_corpus = require("./ai-dependencies/delete_corpus");
 const upload_file = require("./ai-dependencies/upload_file");
 const query = require("./ai-dependencies/query");
+const {generateSalt, hash} = require("./ai-dependencies/password");
 
 var app = express();
 const port = process.env.PORT || 5000;
@@ -46,14 +47,16 @@ app.use(cors({
 
 app.use(bodyParser.json({ limit: '50mb' }));
 
-app.post('/api/signUp', async (req, res) => {
+app.post('/api/signup', async (req, res) => {
   console.log(req.body);
 
   //input validation
-  if (req.body.password.length >= 8) {
+  if (req.body.password.length >= 2) {
     //safe to write to db
     let doc = req.body;
     doc['classes'] = [];
+    doc['salt'] = generateSalt();
+    doc['password'] = hash(req.body.password, doc['salt']);
     
     const result = await userDB.insertOne(doc);
     console.log(result.insertedId);
@@ -70,9 +73,37 @@ app.post('/api/signUp', async (req, res) => {
 });
 
 app.post('/api/login', async (req, res) => {
-  console.log(req.body);
+  const { email } = req.body;
+  console.log(email);
+  const userPassword = await userDB.aggregate([
+    {
+      $match: {
+        email: email
+      }
+    },
+    {
+      $project: {
+        _id: 1, // Exclude the _id field if you want
+        password: 1,
+        salt: 1
+      }
+    }
 
-  res.json(1);
+  ]).toArray();
+
+  if (userPassword) {
+    const hashedStoredPassword = userPassword[0].password;
+    const salt = userPassword[0].salt;
+    const hashedEnteredPassword = hash(req.body.password, salt);
+    console.log(`hashed stored: ${hashedStoredPassword} \nhashed entered ${hashedEnteredPassword}`);
+    if (hashedEnteredPassword === hashedStoredPassword) {
+      res.json(userPassword[0]._id);
+      return;
+    }
+  }
+  
+
+  res.json(0);
 });
 
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import CoolDiv from '../components/CoolDiv';
+import { Link } from 'react-router-dom';
 
 class Login extends React.Component {
   constructor(props) {
@@ -20,7 +21,14 @@ class Login extends React.Component {
     try {
       console.log(this.server_url);
       const res = await axios.post(`http://localhost:5000/api/login`, body);
-      console.log(res);
+      if (res.data) {
+        console.log('login successful');
+        localStorage.setItem('uid', res.data);
+        window.location.href = '/contact';
+      }
+      else {
+        console.log('login failed');
+      }
     }
     catch (err) {
       console.log(err);
@@ -52,7 +60,7 @@ class Login extends React.Component {
 
     const submitButton = (
       <div>
-        <button onClick={async (e) => await this.handleSubmit(e)}>Sign Up</button>
+        <button onClick={async (e) => await this.handleSubmit(e)}>Login</button>
       </div>
     );
 
