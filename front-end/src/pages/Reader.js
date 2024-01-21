@@ -65,10 +65,10 @@ class Reader extends React.Component {
             <div>
                 <h1> Reader page </h1>
                 <div >
-                    <CoolDiv element={element2} up={20} left={10} width={10} height = {20}/>
+                    <CoolDiv element={element2} up={20} left={10} width={15} height = {20}/>
                 </div>
                 <div >
-                    <CoolDiv element={element3} up={20} left={30} width={10} height = {20}/>
+                    <CoolDiv element={element3} up={20} left={30} width={50} height = {50}/>
                 </div>
             </div>
         );
