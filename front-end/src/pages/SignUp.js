@@ -23,7 +23,7 @@ class SignUp extends React.Component {
     try {
       // console.log(this.server_url);
       // const res = await axios.post(`${this.server_url}/signup`, body);
-      const res = await axios.post(`http://localhost:5000/api/test`, body);
+      const res = await axios.post(`http://localhost:5000/api/signup`, body);
       console.log(res);
     }
     catch (err) {

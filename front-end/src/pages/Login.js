@@ -20,7 +20,12 @@ class Login extends React.Component {
     try {
       console.log(this.server_url);
       const res = await axios.post(`http://localhost:5000/api/login`, body);
-      console.log(res);
+      if (res.data == 1) {
+        console.log('login successful');
+      }
+      else {
+        console.log('login failed');
+      }
     }
     catch (err) {
       console.log(err);
