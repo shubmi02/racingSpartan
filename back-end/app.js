@@ -23,9 +23,6 @@ const client = new MongoClient(process.env.DB_URI, {
 });
 
 app.use(express.json());
-app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/index.html");
-});
 
 let userDB = null;
 async function connectToDatabase() {
@@ -223,7 +220,7 @@ function getJwtToken(auth_url, client_id, client_secret) {
   });
 }
 
-app.listen(port, () => console.log(`server started on port ${port}`));
+app.listen(port, '0.0.0.0', () => console.log(`server started on port ${port}`));
 
 
 

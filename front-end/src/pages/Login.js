@@ -2,17 +2,14 @@ import React from 'react';
 import axios from 'axios';
 import CoolDiv from '../components/CoolDiv';
 
-class SignUp extends React.Component {
+class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      firstName: '',
-      lastName: '',
       email: '',
-      password: '',
-      role: '',
+      password: ''
     };
-    // const server_url = process.env.SERVER_URL;
+    const server_url = process.env.SERVER_URL;
   }
   
   async handleSubmit(e) {
@@ -21,9 +18,8 @@ class SignUp extends React.Component {
     const body = this.state;
     console.log(body);
     try {
-      // console.log(this.server_url);
-      // const res = await axios.post(`${this.server_url}/signup`, body);
-      const res = await axios.post(`http://localhost:5000/api/test`, body);
+      console.log(server_url);
+      const res = await axios.post(`http://localhost:5000/api/signup`, body);
       console.log(res);
     }
     catch (err) {
@@ -73,4 +69,4 @@ class SignUp extends React.Component {
   }
 }
 
-export default SignUp;
+export default Login;
