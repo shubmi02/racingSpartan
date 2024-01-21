@@ -2,6 +2,7 @@ import React from 'react';
 import CoolDiv from '../components/CoolDiv';
 import ArticleList from '../components/ArticleList';
 import TextViewer from '../components/TextViewer';
+import SummaryViewer from '../components/SummaryViewer';
 
 class Reader extends React.Component {
     constructor(props) {
@@ -51,28 +52,50 @@ class Reader extends React.Component {
 
 
     render() {
-        const element2 = (
+        const element1 = (
             <ArticleList articleNames={this.state.articleNames} />
         )
         const element =  (
             <p>hi</p>
         )
-        const element3 = (
+        const element2 = (
             <TextViewer text={this.state.articleTexts[0]} />
+        )
+        const element3 = (
+            <SummaryViewer text='Summary Display' />
+        )
+        const backButton = (
+            <button>Back</button>
+        )
+        const submitButton = (
+            <button>Submit</button>
+        )
+        const getSummaryButton = (
+            <button>Get Summary</button>
         )
 
         return (
             <div>
                 <h1> Reader page </h1>
                 <div >
-                    <CoolDiv element={element2} up={20} left={5} width={15} height = {20}/>
+                    <CoolDiv element={element1} up={20} left={5} width={15} height = {20}/>
                 </div>
                 <div >
-                    <CoolDiv element={element3} up={20} left={25} width={50} height = {50}/>
+                    <CoolDiv element={element2} up={20} left={25} width={50} height = {50}/>
                 </div>
                 <div >
-                    <CoolDiv element={element3} up={20} left={25} width={50} height = {50}/>
+                    <CoolDiv element={element3} up={20} left={75} width={20} height = {50}/>
                 </div>
+                <div>
+                    <CoolDiv element={backButton} up={10} left={0} width={20} height = {50}/>
+                </div>
+                <div>
+                    <CoolDiv element={submitButton} up={80} left={40} width={20} height = {50}/>
+                </div>
+                <div>
+                    <CoolDiv element={getSummaryButton} up={40} left={75} width={20} height = {50}/>
+                </div>
+                
             </div>
         );
     }
