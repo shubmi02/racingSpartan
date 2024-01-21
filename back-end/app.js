@@ -1,8 +1,16 @@
+//MongoDB constants
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv').config();
 const { MongoClient, ServerApiVersion } = require('mongodb');
+
+//API constants
+const axios = require("axios");
+const create_corpus = require("./ai-dependencies/create_corpus");
+const delete_corpus = require("./ai-dependencies/delete_corpus");
+const upload_file = require("./ai-dependencies/upload_file");
+const query = require("./ai-dependencies/query");
 
 var app = express();
 const port = process.env.PORT || 5000;
@@ -78,4 +86,5 @@ app.post('/api/test', async (req, res) => {
 });
 
 app.listen(port, () => console.log(`server started on port ${port}`));
+
 

@@ -1,13 +1,13 @@
 import React from 'react';
 import CoolDiv from '../components/CoolDiv';
 import ArticleList from '../components/ArticleList';
+import TextViewer from '../components/TextViewer';
 
 class Reader extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            middleDivWidth: '55%',
             isLeftCollapsed: false,
             isRightCollapsed: false,
             articleNames: ['Article 1 with a kinda long title', 'short title', 'just a normal title'],
@@ -54,11 +54,21 @@ class Reader extends React.Component {
         const element2 = (
             <ArticleList articleNames={this.state.articleNames} />
         )
+        const element =  (
+            <p>hi</p>
+        )
+        const element3 = (
+            <TextViewer text={this.state.articleTexts[0]} />
+        )
 
         return (
             <div>
+                <h1> Reader page</h1>
                 <div >
                     <CoolDiv element={element2} up={20} left={10} width={10} height = {20}/>
+                </div>
+                <div >
+                    <CoolDiv element={element3} up={20} left={30} width={10} height = {20}/>
                 </div>
             </div>
         );

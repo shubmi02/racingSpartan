@@ -14,7 +14,7 @@ class ArticleList extends React.Component {
                 // border: 'solid',
                 borderRadius: '2vh',
                 overflow: 'hidden',
-                backgroundColor: `rgba(0,0,255, 1)`,
+                backgroundColor: `rgba(100,100,255, 1)`,
                 color: 'black',
                 padding: '2%',
                 display: 'flex',
@@ -22,7 +22,7 @@ class ArticleList extends React.Component {
                 justifyContent: '50%'
 
             }}>
-                {console.log(this.props.articleNames)}
+                {console.log(this.props.ar`ticleNames)}
                 <div style={{
                     // border: 'solid',
                     width: '70%',
