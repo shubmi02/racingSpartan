@@ -3,6 +3,7 @@ import CoolDiv from '../components/CoolDiv';
 import ArticleList from '../components/ArticleList';
 import TextViewer from '../components/TextViewer';
 import SummaryViewer from '../components/SummaryViewer';
+import QuestionEntry from '../components/QuestionEntry';
 
 class Reader extends React.Component {
     constructor(props) {
@@ -73,12 +74,15 @@ class Reader extends React.Component {
         const getSummaryButton = (
             <button>Get Summary</button>
         )
+        const enterAnswerField = (
+            <QuestionEntry/>
+        )
 
         return (
             <div>
                 <h1> Reader page </h1>
                 <div >
-                    <CoolDiv element={element1} up={20} left={5} width={15} height = {20}/>
+                    <CoolDiv element={element1} up={25} left={5} width={15} height = {20}/>
                 </div>
                 <div >
                     <CoolDiv element={element2} up={20} left={25} width={50} height = {50}/>
@@ -87,13 +91,16 @@ class Reader extends React.Component {
                     <CoolDiv element={element3} up={20} left={75} width={20} height = {50}/>
                 </div>
                 <div>
-                    <CoolDiv element={backButton} up={10} left={0} width={20} height = {50}/>
+                    <CoolDiv element={backButton} up={20} left={-2.5} width={20} height = {50}/>
                 </div>
                 <div>
                     <CoolDiv element={submitButton} up={80} left={40} width={20} height = {50}/>
                 </div>
                 <div>
                     <CoolDiv element={getSummaryButton} up={40} left={75} width={20} height = {50}/>
+                </div>
+                <div>
+                    <CoolDiv element = {enterAnswerField} up={60} left={40} width={20} height = {50}/>
                 </div>
                 
             </div>
