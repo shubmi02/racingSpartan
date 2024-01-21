@@ -3,7 +3,8 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv').config();
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+const fs = require('fs');
 
 //API constants
 const axios = require("axios");
@@ -11,10 +12,21 @@ const create_corpus = require("./ai-dependencies/create_corpus");
 const delete_corpus = require("./ai-dependencies/delete_corpus");
 const upload_file = require("./ai-dependencies/upload_file");
 const query = require("./ai-dependencies/query");
-const {generateSalt, hash} = require("./ai-dependencies/password");
+const { generateSalt, hash } = require("./ai-dependencies/password");
 
 var app = express();
 const port = process.env.PORT || 5000;
+
+app.use(cors({
+  origin: true,
+  maxAge: 86400
+}));
+
+app.use(express.json({ limit: '100mb' })); // Adjust the limit as needed
+
+
+app.use(bodyParser.json({ limit: '100mb' }));
+
 const client = new MongoClient(process.env.DB_URI, {
   serverApi: {
     version: ServerApiVersion.v1,
@@ -23,14 +35,12 @@ const client = new MongoClient(process.env.DB_URI, {
   }
 });
 
-app.use(express.json());
-
 let userDB = null;
 let classDB = null;
 async function connectToDatabase() {
   try {
     await client.connect();
-    userDB = client.db('RacingSpartan').collection('Users'); 
+    userDB = client.db('RacingSpartan').collection('Users');
     classDB = client.db('RacingSpartan').collection('Classes');
     console.log('Connected to MongoDB');
   } catch (error) {
@@ -40,12 +50,9 @@ async function connectToDatabase() {
 
 connectToDatabase();
 
-app.use(cors({
-  origin: true,
-  maxAge: 86400
-}));
 
-app.use(bodyParser.json({ limit: '50mb' }));
+
+
 
 app.post('/api/signup', async (req, res) => {
   console.log(req.body);
@@ -57,9 +64,14 @@ app.post('/api/signup', async (req, res) => {
     doc['classes'] = [];
     doc['salt'] = generateSalt();
     doc['password'] = hash(req.body.password, doc['salt']);
-    
+
     const result = await userDB.insertOne(doc);
-    console.log(result.insertedId);
+    if (result.insertedId) {
+      res.json(result.insertedId);
+    }
+    else {
+      res.json({ msg: 'error with db' })
+    }
   }
   else {
     res.json({
@@ -67,14 +79,13 @@ app.post('/api/signup', async (req, res) => {
     });
     return;
   }
-  
 
-  res.json(1);
 });
 
 app.post('/api/login', async (req, res) => {
   const { email } = req.body;
   console.log(email);
+
   const userPassword = await userDB.aggregate([
     {
       $match: {
@@ -90,8 +101,8 @@ app.post('/api/login', async (req, res) => {
     }
 
   ]).toArray();
-
-  if (userPassword) {
+  let result
+  if (userPassword && userPassword.lenth > 0) {
     const hashedStoredPassword = userPassword[0].password;
     const salt = userPassword[0].salt;
     const hashedEnteredPassword = hash(req.body.password, salt);
@@ -101,21 +112,125 @@ app.post('/api/login', async (req, res) => {
       return;
     }
   }
-  
 
-  res.json(0);
+
+  res.json({});
+});
+
+app.post('/api/addClass', async (req, res) => {
+  console.log(`req.body = \n${req.body}`);
+  const { teacherID, teacherName, className } = req.body;
+  console.log(`teacherID, = ${teacherID}\nteacherName, = ${teacherName}\nclassName, = ${className}\n`);
+  const doc = {
+    teacherID: teacherID,
+    teacherName: teacherName,
+    className: className,
+    articles: [],
+    students: []
+  }
+  const classResult = await classDB.insertOne(doc);
+  let insertedId = null;
+  if (classResult.insertedId) {
+    insertedId = classResult.insertedId;
+  }
+  else {
+    res.json(0);
+  }
+
+  const userResult = await userDB.updateOne(
+    {
+      _id: new ObjectId(teacherID)
+    },
+    {
+      $push: { classes: insertedId }
+    }
+  );
+
+  if (userResult.modifiedCount === 1) {
+    res.json(insertedId);
+    return;
+  }
+
+
+  res.json({});
+});
+
+app.post('/api/addArticle', async (req, res) => {
+  const { classID, articleName, file } = req.body;
+  console.log(classID);
+  console.log(articleName);
+
+  const result = await classDB.updateOne(
+    {
+      _id: new ObjectId(classID)
+    },
+    {
+      $push: {
+        articles: {
+          articleName: articleName,
+          file: file
+        }
+
+      }
+    }
+  );
+
+  if (result.modifiedCount && result.modifiedCount === 1) {
+    res.json(1);
+  }
+  else {
+    res.json(0);
+  }
+});
+
+app.post('/api/getArticles', async (req, res) => {
+  const { ClassID } = req.body;
+  console.log(ClassID);
+  const result = await classDB.aggregate([
+    {
+        $match : {
+          _id: new ObjectId(ClassID)
+        }
+    },
+    {
+      $project: {
+        articles: 1
+      }
+    }]).toArray();
+  if (result.length > 0) {
+    res.json(result[0]);
+  }
+  else {
+    res.json(0);
+  }
+})
+
+// app.post('/api/getSummary', async (req, res) => {
+//   r
+// });
+
+app.post('/api/deleteClass', async (req, res) => {
+  const { classID } = req.body;
+  const result = await classDB.deleteMany({
+    _id: new ObjectId(classID)
+  });
+  if (result.deletedCount > 0) {
+    console.log("Documents deleted successfully");
+  } else {
+    console.log("No documents found");
+  }
 });
 
 
 
 app.post('/api/test', async (req, res) => {
-  const doc = {
-    name: 'kanoa',
-    age: '25'
-  }
+  // const doc = {
+  //   name: 'kanoa',
+  //   age: '25'
+  // }
 
-  const result = await userDB.insertOne(doc);
-  console.log(`inserted id: ${result.insertedId}`);
+  // const result = await userDB.insertOne(doc);
+  console.log(`test`);
   res.json('bruh');
 });
 

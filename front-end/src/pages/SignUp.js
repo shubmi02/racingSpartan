@@ -24,7 +24,14 @@ class SignUp extends React.Component {
       // console.log(this.server_url);
       // const res = await axios.post(`${this.server_url}/signup`, body);
       const res = await axios.post(`http://localhost:5000/api/signup`, body);
-      console.log(res);
+      if (!res.data.msg) {
+        console.log('login successful');
+        localStorage.setItem('uid', res.data);
+        window.location.href = '/homepage';
+      }
+      else {
+        console.log('login failed');
+      }
     }
     catch (err) {
       console.log(err);

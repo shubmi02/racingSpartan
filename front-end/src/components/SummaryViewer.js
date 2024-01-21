@@ -4,6 +4,7 @@ const SummaryViewer = ({ text }) => {
   return(
 
     <div style={{
+      maxHeight: '300px',
       overflow: 'auto',
       border: '2px solid #ccc',
       padding: '20px',

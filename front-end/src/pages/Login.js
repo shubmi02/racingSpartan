@@ -24,7 +24,7 @@ class Login extends React.Component {
       if (res.data) {
         console.log('login successful');
         localStorage.setItem('uid', res.data);
-        window.location.href = '/contact';
+        window.location.href = '/homepage';
       }
       else {
         console.log('login failed');
