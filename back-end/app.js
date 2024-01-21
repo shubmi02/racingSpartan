@@ -25,10 +25,12 @@ const client = new MongoClient(process.env.DB_URI, {
 app.use(express.json());
 
 let userDB = null;
+let classDB = null;
 async function connectToDatabase() {
   try {
     await client.connect();
     userDB = client.db('RacingSpartan').collection('Users'); 
+    classDB = client.db('RacingSpartan').collection('Classes');
     console.log('Connected to MongoDB');
   } catch (error) {
     console.error('Error connecting to MongoDB:', error);

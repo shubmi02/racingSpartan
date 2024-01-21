@@ -18,8 +18,8 @@ class Login extends React.Component {
     const body = this.state;
     console.log(body);
     try {
-      console.log(server_url);
-      const res = await axios.post(`http://localhost:5000/api/signup`, body);
+      console.log(this.server_url);
+      const res = await axios.post(`http://localhost:5000/api/login`, body);
       console.log(res);
     }
     catch (err) {
@@ -62,7 +62,7 @@ class Login extends React.Component {
           <CoolDiv element={mainForm} up={35} left={35} width={20} height={20} />
         </div>
         <div>
-          <CoolDiv element={submitButton} up={65} left={38} width={20} height={20} />
+          <CoolDiv element={submitButton} up={47} left={38} width={20} height={20} />
         </div>
       </div>
     );

@@ -4,6 +4,7 @@ import './App.css';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Reader from './pages/Reader';
 import SignUp from './pages/SignUp';
+import Login from './pages/Login';
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
           <Route path="/" element={<Navigate to="/homepage" />} />
           <Route path="/reader" element={<Reader/>} />
           <Route path="/signup" element={<SignUp/>} />
+          <Route path="/login" element={<Login/>} />
           {/* btw the path should be changed in the above one to class/id/reader
            <Route path="/homepage" element={<SquishList />} /> */}
         </Routes>
