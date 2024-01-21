@@ -22,16 +22,23 @@ const client = new MongoClient(process.env.DB_URI, {
   }
 });
 
+app.use(cors({
+  origin: true,
+  maxAge: 86400
+}));
+
 app.use(express.json());
-app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/index.html");
-});
+// app.get("/", (req, res) => {
+//   res.sendFile(__dirname + "/index.html");
+// });
 
 let userDB = null;
+let classDB = null
 async function connectToDatabase() {
   try {
     await client.connect();
     userDB = client.db('RacingSpartan').collection('Users'); 
+    classDB = client.db('RacingSpartan').collection('Classes');
     console.log('Connected to MongoDB');
   } catch (error) {
     console.error('Error connecting to MongoDB:', error);
@@ -40,10 +47,7 @@ async function connectToDatabase() {
 
 connectToDatabase();
 
-app.use(cors({
-  origin: true,
-  maxAge: 86400
-}));
+
 
 app.use(bodyParser.json({ limit: '50mb' }));
 
@@ -89,7 +93,7 @@ app.post('/api/test', async (req, res) => {
   res.json('bruh');
 });
 
-app.listen(port, () => console.log(`server started on port ${port}`));
+
 
 //for the AI API
 app.post("/queryData", (req, res) => {
@@ -194,7 +198,7 @@ app.post("/uploadFile", (req, res) => {
     });
 });
 
-app.listen(port, () => console.log(`Listening on port ${port}...`));
+
 
 function getJwtToken(auth_url, client_id, client_secret) {
   const URL_SUFFIX = '/oauth2/token';
@@ -228,6 +232,4 @@ function getJwtToken(auth_url, client_id, client_secret) {
 }
 
 
-
-
-
+app.listen(port, () => console.log(`Listening on port ${port}...`));
