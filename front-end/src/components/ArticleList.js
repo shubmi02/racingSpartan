@@ -17,12 +17,12 @@ class ArticleList extends React.Component {
                 backgroundColor: `rgba(100,100,255, 1)`,
                 color: 'black',
                 padding: '2%',
-                display: 'flex',
+                display: 'flex'
                 alignItems: '50%',
                 justifyContent: '50%'
 
             }}>
-                {console.log(this.props.ar`ticleNames)}
+                {console.log(this.props.articleNames)}
                 <div style={{
                     // border: 'solid',
                     width: '70%',

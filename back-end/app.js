@@ -22,6 +22,11 @@ const client = new MongoClient(process.env.DB_URI, {
   }
 });
 
+app.use(express.json());
+app.get("/", (req, res) => {
+  res.sendFile(__dirname + "/index.html");
+});
+
 let userDB = null;
 async function connectToDatabase() {
   try {
@@ -32,7 +37,6 @@ async function connectToDatabase() {
     console.error('Error connecting to MongoDB:', error);
   }
 }
-
 
 connectToDatabase();
 
@@ -86,5 +90,144 @@ app.post('/api/test', async (req, res) => {
 });
 
 app.listen(port, () => console.log(`server started on port ${port}`));
+
+//for the AI API
+app.post("/queryData", (req, res) => {
+  const {
+    serving_endpoint,
+    customer_id,
+    corpus_id,
+    auth_url,
+    client_id,
+    client_secret,
+  } = req.body;
+  getJwtToken(auth_url, client_id, client_secret)
+    .then((token) => {
+      query
+        .query(customer_id, corpus_id, serving_endpoint, token)
+        .then((result) => {
+          res.send(result.data);
+        });
+    })
+    .catch((err) => {
+      error = {
+        detail: "Could not obtain OAuth token.",
+        message: err.message,
+        code: err.code,
+      };
+      res.send(JSON.stringify(error));
+    });
+});
+
+app.post("/createCorpus", (req, res) => {
+  const { admin_endpoint, customer_id, auth_url, client_id, client_secret } =
+    req.body;
+  getJwtToken(auth_url, client_id, client_secret)
+    .then((token) => {
+      create_corpus
+        .createCorpus(customer_id, admin_endpoint, token)
+        .then((result) => {
+          res.send(result.data);
+        });
+    })
+    .catch((err) => {
+      error = {
+        detail: "Could not obtain OAuth token.",
+        message: err.message,
+        code: err.code,
+      };
+      res.send(JSON.stringify(error));
+    });
+});
+
+app.post("/deleteCorpus", (req, res) => {
+  const {
+    admin_endpoint,
+    customer_id,
+    auth_url,
+    client_id,
+    client_secret,
+    corpus_id,
+  } = req.body;
+  getJwtToken(auth_url, client_id, client_secret)
+    .then((token) => {
+      delete_corpus
+        .deleteCorpus(customer_id, corpus_id, admin_endpoint, token)
+        .then((result) => {
+          res.send(result.data);
+        });
+    })
+    .catch((err) => {
+      error = {
+        detail: "Could not obtain OAuth token.",
+        message: err.message,
+        code: err.code,
+      };
+      res.send(JSON.stringify(error));
+    });
+});
+
+app.post("/uploadFile", (req, res) => {
+  const {
+    indexing_endpoint,
+    customer_id,
+    corpus_id,
+    auth_url,
+    client_id,
+    client_secret,
+  } = req.body;
+  getJwtToken(auth_url, client_id, client_secret)
+    .then((token) => {
+      upload_file
+        .uploadFile(customer_id, corpus_id, indexing_endpoint, token)
+        .then((result) => {
+          res.send(result.data);
+        });
+    })
+    .catch((err) => {
+      error = {
+        detail: "Could not obtain OAuth token.",
+        message: err.message,
+        code: err.code,
+      };
+      res.send(JSON.stringify(error));
+    });
+});
+
+app.listen(port, () => console.log(`Listening on port ${port}...`));
+
+function getJwtToken(auth_url, client_id, client_secret) {
+  const URL_SUFFIX = '/oauth2/token';
+  const sanitized_url = auth_url.replace(/\/+$/, ''); // remove trailing slashes
+  const url = sanitized_url.endsWith(URL_SUFFIX) ? sanitized_url : `${sanitized_url}${URL_SUFFIX}`;
+  const config = {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+  };
+
+  return new Promise((resolve, reject) => {
+    axios
+      .post(
+        url,
+        new URLSearchParams({
+          grant_type: "client_credentials",
+          client_id,
+          client_secret
+        }),
+        config
+      )
+      .then((result) => {
+        resolve(result.data.access_token);
+      })
+      .catch((err) => {
+        console.log(err);
+        reject(err);
+      });
+  });
+}
+
+
+
 
 

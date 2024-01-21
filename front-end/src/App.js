@@ -3,6 +3,7 @@ import axios from 'axios';
 import './App.css';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Reader from './pages/Reader';
+import SignUp from './pages/SignUp';
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/homepage" />} />
           <Route path="/reader" element={<Reader/>} />
+          <Route path="/signup" element={<SignUp/>} />
           {/* btw the path should be changed in the above one to class/id/reader
            <Route path="/homepage" element={<SquishList />} /> */}
         </Routes>

@@ -21,11 +21,6 @@ const query = require("./query");
 
 const app = express();
 
-app.use(express.json());
-app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/index.html");
-});
-
 app.post("/queryData", (req, res) => {
   const {
     serving_endpoint,
